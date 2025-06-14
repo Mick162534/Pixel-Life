@@ -7,7 +7,8 @@ from resources.resource_manager import ResourceManager
 from resources.resource_node import ResourceNode
 from resources.bush_node import BushNode
 from resources.pile_building import PileBuilding
-from infrastructure.wall_manager import WallManager, WallTile
+from infrastructure.wall_manager import WallManager
+from infrastructure.wall_tile import WallTile
 from entities.creature import Creature
 from society.tribe import Tribe
 
@@ -26,6 +27,7 @@ class World:
         self.wall_manager = WallManager()
         self.wall_targets = []
         self.tribes = []
+        self.buildings = []
         self.initialize_environment()
 
     def initialize_environment(self):
@@ -100,6 +102,7 @@ class World:
         for building in self.buildings:
             if isinstance(building, CommunalCenter):
                 building.tick(self)
+        self.construction_manager.tick(self)
         self.pheromone_map.evaporate()
         for creature in self.creatures:
             creature.tick(self)

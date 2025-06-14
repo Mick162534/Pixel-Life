@@ -1,20 +1,14 @@
 import pygame
 import os
 from pathlib import Path
-from entities.trait_inheritance import load_all_traits
 
 class SimRenderer:
     def __init__(self, sim, screen, tile_size=20):
         self.sim = sim
         self.screen = screen
         self.tile_size = tile_size
-        # Load creature sprites
+        # Load creature sprites (optional)
         self.creature_sprites = {}
-        for trait in load_all_traits():
-            path = Path("assets/creatures") / f"{trait}.png"
-            if path.exists():
-                img = pygame.image.load(str(path))
-                self.creature_sprites[trait] = pygame.transform.scale(img, (tile_size, tile_size))
         # Load building sprites
         self.building_sprites = {}
         building_types = ['StorageHut', 'LoggingCamp', 'Farm', 'ConstructionYard', 'TamingPen', 'Watchtower', 'ResearchHut', 'Housing', 'CommunalCenter']
