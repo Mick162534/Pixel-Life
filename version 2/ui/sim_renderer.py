@@ -7,6 +7,11 @@ class SimRenderer:
         self.sim = sim
         self.screen = screen
         self.tile_size = tile_size
+        self.camera_x = 0
+        self.camera_y = 0
+        self.view_tiles_x = screen.get_width() // tile_size
+        self.view_tiles_y = screen.get_height() // tile_size
+
         # Load creature sprites (optional)
         self.creature_sprites = {}
         # Load building sprites
@@ -20,19 +25,25 @@ class SimRenderer:
 
     def render(self):
         self.screen.fill((30, 30, 30))
-        # Draw buildings
+        # Draw buildings within camera view
         for b in self.sim.buildings:
-            sprite = self.building_sprites.get(b.__class__.__name__)
-            if sprite:
-                self.screen.blit(sprite, (b.x*self.tile_size, b.y*self.tile_size))
+            sx = (b.x - self.camera_x) * self.tile_size
+            sy = (b.y - self.camera_y) * self.tile_size
+            if 0 <= sx < self.screen.get_width() and 0 <= sy < self.screen.get_height():
+                sprite = self.building_sprites.get(b.__class__.__name__)
+                if sprite:
+                    self.screen.blit(sprite, (sx, sy))
         # Draw creatures
         for c in self.sim.creatures:
             if not getattr(c, "alive", True):
                 continue
-            trait = c.traits[0] if c.traits else None
-            sprite = self.creature_sprites.get(trait)
-            if sprite:
-                self.screen.blit(sprite, (c.x*self.tile_size, c.y*self.tile_size))
-            else:
-                pygame.draw.rect(self.screen, (255,255,0), (c.x*self.tile_size, c.y*self.tile_size, self.tile_size, self.tile_size))
+            sx = (c.x - self.camera_x) * self.tile_size
+            sy = (c.y - self.camera_y) * self.tile_size
+            if 0 <= sx < self.screen.get_width() and 0 <= sy < self.screen.get_height():
+                trait = c.traits[0] if c.traits else None
+                sprite = self.creature_sprites.get(trait)
+                if sprite:
+                    self.screen.blit(sprite, (sx, sy))
+                else:
+                    pygame.draw.rect(self.screen, (255,255,0), (sx, sy, self.tile_size, self.tile_size))
         pygame.display.flip()
