@@ -22,6 +22,8 @@ class Creature:
         self.build_target = None
         self.build_timer = 0
         self.eating = False
+        self.move_cooldown = 0
+        self.target_creature = None
 
     def tick(self, world):
         self.age += 1
@@ -54,19 +56,38 @@ class Creature:
             self.wander(world)
 
     def eat_logic(self, world):
-        if self.target_node:
-            if abs(self.target_node.x - self.x) <= 1 and abs(self.target_node.y - self.y) <= 1:
-                eaten = self.target_node.harvest(10)
-                if eaten > 0:
+        if "carnivore" in self.traits:
+            # Hunt nearby herbivores
+            if self.target_creature and not self.target_creature.alive:
+                self.target_creature = None
+            if self.target_creature:
+                if abs(self.target_creature.x - self.x) <= 1 and abs(self.target_creature.y - self.y) <= 1:
+                    self.target_creature.alive = False
+                    eaten = 20
                     self.hunger = min(100, self.hunger + eaten * 2)
                     self.energy = min(100, self.energy + eaten)
-                    self.target_node = None
+                    self.target_creature = None
+                else:
+                    self.move_towards(self.target_creature.x, self.target_creature.y, world)
+
             else:
-                self.move_towards(self.target_node.x, self.target_node.y)
+                potential = [c for c in world.creatures if c.alive and c is not self and "herbivore" in c.traits]
+                if potential:
+                    self.target_creature = min(potential, key=lambda c: abs(c.x - self.x) + abs(c.y - self.y))
         else:
-            bushes = world.get_bushes_nearby(self.x, self.y)
-            if bushes:
-                self.target_node = random.choice(bushes)
+            if self.target_node:
+                if abs(self.target_node.x - self.x) <= 1 and abs(self.target_node.y - self.y) <= 1:
+                    eaten = self.target_node.harvest(10)
+                    if eaten > 0:
+                        self.hunger = min(100, self.hunger + eaten * 2)
+                        self.energy = min(100, self.energy + eaten)
+                        self.target_node = None
+                else:
+                    self.move_towards(self.target_node.x, self.target_node.y, world)
+            else:
+                bushes = world.get_bushes_nearby(self.x, self.y)
+                if bushes:
+                    self.target_node = random.choice(bushes)
 
     def gather_logic(self, world):
         if self.carrying:
@@ -78,7 +99,7 @@ class Creature:
                     self.carrying = None
                     self.target_pile = None
                 else:
-                    self.move_towards(self.target_pile.x, self.target_pile.y)
+                    self.move_towards(self.target_pile.x, self.target_pile.y, world)
         else:
             if not self.target_node:
                 nearby = world.resource_manager.get_nearby_nodes(self.x, self.y, radius=5, resource_type="wood")
@@ -91,7 +112,7 @@ class Creature:
                         self.carrying = ("wood", harvested)
                         self.target_node = None
                 else:
-                    self.move_towards(self.target_node.x, self.target_node.y)
+                    self.move_towards(self.target_node.x, self.target_node.y, world)
 
     def builder_logic(self, world):
         if self.build_target:
@@ -104,20 +125,35 @@ class Creature:
                 else:
                     self.build_timer -= 1
             else:
-                self.move_towards(bx, by)
+                self.move_towards(bx, by, world)
         else:
             target = world.get_wall_construction_site()
             if target:
                 self.build_target = target
 
-    def move_towards(self, tx, ty):
-        dx = tx - self.x
-        dy = ty - self.y
-        self.x += 1 if dx > 0 else -1 if dx < 0 else 0
-        self.y += 1 if dy > 0 else -1 if dy < 0 else 0
+    def try_move(self, dx, dy, world):
+        if self.move_cooldown > 0:
+            self.move_cooldown -= 1
+            return
+        nx = self.x + dx
+        ny = self.y + dy
+        if not (0 <= nx < world.width and 0 <= ny < world.height):
+            return
+        tile = world.terrain.get_tile(nx, ny)
+        if tile == "deep_water" and "swimming" not in self.traits:
+            return
+        self.x = nx
+        self.y = ny
+        if tile == "shallow_water" and "swimming" not in self.traits:
+            self.move_cooldown = 1
+
+    def move_towards(self, tx, ty, world):
+        dx = 1 if tx > self.x else -1 if tx < self.x else 0
+        dy = 1 if ty > self.y else -1 if ty < self.y else 0
+        self.try_move(dx, dy, world)
 
     def wander(self, world):
-        nx = self.x + random.randint(-1, 1)
-        ny = self.y + random.randint(-1, 1)
-        self.x = max(0, min(world.width - 1, nx))
-        self.y = max(0, min(world.height - 1, ny))
+        dx = random.randint(-1, 1)
+        dy = random.randint(-1, 1)
+        self.try_move(dx, dy, world)
+

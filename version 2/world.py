@@ -60,12 +60,18 @@ class World:
                         ["bear", "carnivore"], generate_stats())
         # spawn fish in a random water tile if available
         fx, fy = 0, 0
-        water_tiles = [(x, y) for x in range(self.width) for y in range(self.height)
-                       if self.terrain.get_tile(x, y) == "water"]
+        water_tiles = [
+            (x, y)
+            for x in range(self.width)
+            for y in range(self.height)
+            if "water" in self.terrain.get_tile(x, y)
+        ]
         if water_tiles:
             fx, fy = random.choice(water_tiles)
-        fish = Creature("fish_1", fx, fy, ["fish", "herbivore"], generate_stats())
+        fish = Creature("fish_1", fx, fy, ["fish", "herbivore", "swimming"], generate_stats())
         self.creatures.extend([gatherer, builder, deer, boar, goat, bear, fish])
+
+
         tribe = Tribe("tribe_alpha", self.width//2, self.height//2)
         tribe.add_member(gatherer)
         tribe.add_member(builder)
@@ -124,7 +130,7 @@ class World:
             'boar': ['boar', 'herbivore'],
             'goat': ['goat', 'herbivore'],
             'bear': ['bear', 'carnivore'],
-            'fish': ['fish', 'herbivore'],
+            'fish': ['fish', 'herbivore', 'swimming'],
         }
         traits = species_traits.get(species, ['herbivore'])
 

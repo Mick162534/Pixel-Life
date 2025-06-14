@@ -38,7 +38,8 @@ class SimRenderer:
         self.terrain_sprites = {}
         terrain_colors = {
             "grass": (34, 139, 34),
-            "water": (0, 0, 255),
+            "shallow_water": (173, 216, 230),
+            "deep_water": (0, 0, 139),
             "tree": (139, 69, 19),
 
         }

@@ -19,7 +19,15 @@ class MapRenderer:
         for x in range(self.sim.width):
             for y in range(self.sim.height):
                 tile = self.sim.terrain.get_tile(x, y)
-                color = (34,139,34) if tile == "grass" else (0,0,255) if tile == "water" else (139,69,19)
+                if tile == "grass":
+                    color = (34, 139, 34)
+                elif tile == "shallow_water":
+                    color = (173, 216, 230)
+                elif tile == "deep_water":
+                    color = (0, 0, 139)
+                else:
+                    color = (139, 69, 19)
+
                 pygame.draw.rect(
                     self.screen,
                     color,
