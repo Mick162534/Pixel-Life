@@ -1,0 +1,40 @@
+Ecosystem Simulation – Available Functionality
+
+1. Creature System:
+   - Unique ID, position, age, stats (strength, charisma, intelligence, agility, endurance, social_drive), energy, hunger.
+   - Traits-based behavior: herbivore, carnivore, warrior, builder, gatherer, alpha, leader, curious, expansionist, herder.
+
+2. Environment:
+   - Harvestable ResourceNode (trees) and BushNode (berries) with regrowth logic.
+   - ResourceManager for node management.
+
+3. Resource Loop:
+   - Gatherers harvest resources and deliver to StorageHut.
+   - Builders withdraw wood from StorageHut for construction.
+
+4. Buildings:
+   - LoggingCamp, Farm, ConstructionYard, TamingPen, Watchtower, ResearchHut, StorageHut, Housing.
+   - ConstructionManager handles build queue and progress.
+   - Building prerequisites and per-tick behavior.
+
+5. Research System:
+   - ResearchHut generates points; ResearchManager unlocks tech with weighted randomness influenced by traits and conditions.
+
+6. Tribes and Diplomacy:
+   - Tribe class: tracks members, territory_chunks, relationships, research, walls (via WallManager), population cap (via Housing).
+   - Diplomacy states: neutral, hostile, allied.
+   - Affinity and tribe formation: affinity_system and tribe_creator modules.
+
+7. Raid Bands:
+   - Band and RaidFSM coordinate warrior raids: traveling, attacking, returning.
+
+8. Housing & Population:
+   - Housing buildings contribute to population cap; tribes enforce cap before breeding.
+
+9. Affinity & Tribe Creation:
+   - calculate_affinity and update_all_affinities compute mutual affinities.
+   - form_tribes dynamically groups creatures into tribes based on affinity.
+
+10. World Tick Loop:
+    - world.tick: resource_manager.tick, bush.tick, form_tribes, tribe.tick, band.tick, creature.tick, construction_manager.tick, cleanup_unused_walls.
+

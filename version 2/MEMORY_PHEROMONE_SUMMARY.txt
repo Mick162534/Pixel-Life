@@ -1,0 +1,15 @@
+Ecosystem Simulation – Memory & Pheromone Systems Added
+
+- **Memory System** (systems/memory.py):
+  - Each Creature now has a Memory buffer (capacity 10) of recent events.
+  - Memory events can be added and queried by type.
+
+- **Pheromone Map** (systems/pheromone_map.py):
+  - Global 2D pheromone grid tracks scent/intensity.
+  - Creatures deposit 'presence' pheromones every tick.
+  - Pheromones evaporate over time and can be queried.
+
+- **Integration**:
+  - World now instantiates PheromoneMap and evaporates each tick.
+  - Creatures initialize Memory and deposit pheromones in their tick.
+
