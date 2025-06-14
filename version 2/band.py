@@ -7,7 +7,7 @@ class RaidFSM:
 
     def tick(self, band, world):
         if self.state == "Traveling":
-            if band.is_near_target():
+            if band.is_near_target(world):
                 self.state = "Attacking"
         elif self.state == "Attacking":
             enemies = band.find_enemies(world)
@@ -29,7 +29,7 @@ class Band:
     def tick(self, world):
         self.fsm.tick(self, world)
 
-    def is_near_target(self):
+    def is_near_target(self, world):
         for m in self.members:
             for tribe in world.tribes:
                 if tribe.tribe_id == self.fsm.target_tribe_id:

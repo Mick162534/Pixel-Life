@@ -26,6 +26,7 @@ class World:
         self.wall_manager = WallManager()
         self.wall_targets = []
         self.tribes = []
+        self.buildings = []
         self.initialize_environment()
 
     def initialize_environment(self):
@@ -100,6 +101,7 @@ class World:
         for building in self.buildings:
             if isinstance(building, CommunalCenter):
                 building.tick(self)
+        self.construction_manager.tick(self)
         self.pheromone_map.evaporate()
         for creature in self.creatures:
             creature.tick(self)
