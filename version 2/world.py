@@ -11,9 +11,9 @@ from infrastructure.wall_manager import WallManager
 from infrastructure.wall_tile import WallTile
 from entities.creature import Creature
 from society.tribe import Tribe
+from systems.pheromone_map import PheromoneMap
 
 class World:
-    from systems.pheromone_map import PheromoneMap
 
     def __init__(self, width, height):
         self.width = width
