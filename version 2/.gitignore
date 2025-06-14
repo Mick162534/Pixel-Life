@@ -1,0 +1,5 @@
+# Ignore asset PNGs and build artifacts
+assets/*.png
+assets/*/*.png
+__pycache__/
+assets.zip

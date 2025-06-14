@@ -1,8 +1,9 @@
 import pygame
 
 class MapRenderer:
-    def __init__(self, sim, screen, map_rect=(10,10,200,200)):
+    def __init__(self, sim, renderer, screen, map_rect=(10,10,200,200)):
         self.sim = sim
+        self.renderer = renderer
         self.screen = screen
         self.map_rect = pygame.Rect(map_rect)
 
@@ -11,18 +12,41 @@ class MapRenderer:
         s = pygame.Surface((self.map_rect.width, self.map_rect.height), pygame.SRCALPHA)
         s.fill((0,0,0,180))
         self.screen.blit(s, (self.map_rect.x, self.map_rect.y))
-        # draw chunks
-        cw = self.map_rect.width / self.sim.chunk_manager.max_chunks_x
-        ch = self.map_rect.height / self.sim.chunk_manager.max_chunks_y
-        for (cx, cy), chunk in self.sim.chunk_manager.loaded.items():
-            color = (34,139,34)  # default
-            # pick color by biome of first tile
-            tile = chunk['tiles'][0][0]
-            if tile == 'water': color = (0,0,255)
-            elif tile == 'forest': color = (34,139,34)
-            pygame.draw.rect(self.screen, color,
-                (self.map_rect.x + cx*cw, self.map_rect.y + cy*ch, cw, ch))
-        # highlight camera
-        cam_cx, cam_cy = self.sim.camera_chunk
-        pygame.draw.rect(self.screen, (255,255,0),
-                         (self.map_rect.x + cam_cx*cw, self.map_rect.y + cam_cy*ch, cw, ch), 2)
+        # simple mini-map of creature positions
+        cw = self.map_rect.width / self.sim.width
+        ch = self.map_rect.height / self.sim.height
+        # draw simple terrain colors
+        for x in range(self.sim.width):
+            for y in range(self.sim.height):
+                tile = self.sim.terrain.get_tile(x, y)
+                color = (34,139,34) if tile == "grass" else (0,0,255) if tile == "water" else (139,69,19)
+                pygame.draw.rect(
+                    self.screen,
+                    color,
+                    (self.map_rect.x + x * cw, self.map_rect.y + y * ch, cw, ch)
+                )
+
+        for c in self.sim.creatures:
+            if not getattr(c, "alive", True):
+                continue
+            trait = c.traits[0] if c.traits else "herbivore"
+            color = self.renderer.creature_sprites.get(trait)
+            if isinstance(color, pygame.Surface):
+                color = color.get_at((0, 0))
+            else:
+                color = (255, 255, 0)
+            pygame.draw.rect(
+                self.screen,
+                color,
+                (self.map_rect.x + c.x * cw, self.map_rect.y + c.y * ch, cw, ch),
+            )
+        # show camera viewport
+        rect_w = self.renderer.view_tiles_x * cw
+        rect_h = self.renderer.view_tiles_y * ch
+        cam_rect = pygame.Rect(
+            self.map_rect.x + self.renderer.camera_x * cw,
+            self.map_rect.y + self.renderer.camera_y * ch,
+            rect_w,
+            rect_h,
+        )
+        pygame.draw.rect(self.screen, (255,255,0), cam_rect, 1)

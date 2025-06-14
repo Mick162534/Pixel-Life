@@ -38,3 +38,12 @@ Ecosystem Simulation – Available Functionality
 10. World Tick Loop:
     - world.tick: resource_manager.tick, bush.tick, form_tribes, tribe.tick, band.tick, creature.tick, construction_manager.tick, cleanup_unused_walls.
 
+11. Terrain and Rendering:
+   - TerrainGenerator creates grass, water, and tree tiles.
+   - SimRenderer and MapRenderer draw terrain using basic colored sprites. Trees
+     render as brown squares.
+   - When no image assets are present, SimRenderer generates colored placeholders
+     for buildings and creature species.
+   - Spawn menu (toggle with `n`) lets you spawn gatherers, builders and wildlife
+     such as deer, boar, goat, bear and fish. Hold Shift while confirming to
+     spawn five at once.
