@@ -39,7 +39,8 @@ class SimRenderer:
         terrain_colors = {
             "grass": (34, 139, 34),
             "water": (0, 0, 255),
-            "tree": (0, 100, 0),
+            "tree": (139, 69, 19),
+
         }
         for t, color in terrain_colors.items():
             surface = pygame.Surface((tile_size, tile_size))
@@ -55,6 +56,12 @@ class SimRenderer:
             "builder": (255, 215, 0),
             "gatherer": (30, 144, 255),
             "herbivore": (124, 252, 0),
+            "deer": (210, 180, 140),
+            "boar": (165, 42, 42),
+            "goat": (245, 245, 220),
+            "bear": (139, 69, 19),
+            "fish": (0, 191, 255),
+
         }
         for trait, color in trait_colors.items():
             surf = pygame.Surface((tile_size, tile_size))
@@ -77,7 +84,6 @@ class SimRenderer:
                 sprite = self.terrain_sprites.get(tile)
                 if sprite:
                     self.screen.blit(sprite, (x * self.tile_size, y * self.tile_size))
-
 
         # Draw buildings within camera view
         for b in self.sim.buildings:

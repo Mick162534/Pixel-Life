@@ -29,9 +29,15 @@ class MapRenderer:
         for c in self.sim.creatures:
             if not getattr(c, "alive", True):
                 continue
+            trait = c.traits[0] if c.traits else "herbivore"
+            color = self.renderer.creature_sprites.get(trait)
+            if isinstance(color, pygame.Surface):
+                color = color.get_at((0, 0))
+            else:
+                color = (255, 255, 0)
             pygame.draw.rect(
                 self.screen,
-                (255, 255, 0),
+                color,
                 (self.map_rect.x + c.x * cw, self.map_rect.y + c.y * ch, cw, ch),
             )
         # show camera viewport

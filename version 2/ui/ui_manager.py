@@ -11,7 +11,9 @@ class UIManager:
         self.cam_start = (0, 0)
         self.show_spawn_menu = False
         self.menu_index = 0
-        self.species_options = ['gatherer', 'builder', 'herbivore']
+        self.species_options = [
+            'gatherer', 'builder', 'deer', 'boar', 'goat', 'bear', 'fish'
+        ]
         self.font = pygame.font.SysFont(None, 18)
 
     def handle_event(self, evt):
@@ -72,4 +74,3 @@ class UIManager:
                 color = (255, 255, 0) if i == self.menu_index else (255, 255, 255)
                 text = self.font.render(sp, True, color)
                 screen.blit(text, (x + 5, y + 5 + i * 20))
-

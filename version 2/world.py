@@ -46,11 +46,26 @@ class World:
         pile = PileBuilding(self.width//2, self.height//2, owner_id="test_tribe")
         self.piles.append(pile)
 
-        gatherer = Creature("gatherer_1", self.width//2 + 2, self.height//2 + 2, ["gatherer"], {"strength": 10, "intelligence": 10, "charisma": 5})
-        builder = Creature("builder_1", self.width//2 + 4, self.height//2 + 4, ["builder"], {"strength": 10, "intelligence": 8, "charisma": 5})
-        deer = Creature("deer_1", self.width//2 - 3, self.height//2 - 3, ["herbivore"], {"strength": 5, "intelligence": 6, "charisma": 4})
-        self.creatures.extend([gatherer, builder, deer])
-
+        gatherer = Creature("gatherer_1", self.width//2 + 2, self.height//2 + 2,
+                            ["gatherer"], generate_stats())
+        builder = Creature("builder_1", self.width//2 + 4, self.height//2 + 4,
+                           ["builder"], generate_stats())
+        deer = Creature("deer_1", self.width//2 - 3, self.height//2 - 3,
+                        ["deer", "herbivore"], generate_stats())
+        boar = Creature("boar_1", random.randint(0, self.width-1), random.randint(0, self.height-1),
+                        ["boar", "herbivore"], generate_stats())
+        goat = Creature("goat_1", random.randint(0, self.width-1), random.randint(0, self.height-1),
+                        ["goat", "herbivore"], generate_stats())
+        bear = Creature("bear_1", random.randint(0, self.width-1), random.randint(0, self.height-1),
+                        ["bear", "carnivore"], generate_stats())
+        # spawn fish in a random water tile if available
+        fx, fy = 0, 0
+        water_tiles = [(x, y) for x in range(self.width) for y in range(self.height)
+                       if self.terrain.get_tile(x, y) == "water"]
+        if water_tiles:
+            fx, fy = random.choice(water_tiles)
+        fish = Creature("fish_1", fx, fy, ["fish", "herbivore"], generate_stats())
+        self.creatures.extend([gatherer, builder, deer, boar, goat, bear, fish])
         tribe = Tribe("tribe_alpha", self.width//2, self.height//2)
         tribe.add_member(gatherer)
         tribe.add_member(builder)
@@ -99,9 +114,20 @@ class World:
             if abs(c.x - x) <= radius and abs(c.y - y) <= radius:
                 found.append(c)
         return found
+
     def spawn_creature(self, species, x, y):
         """Create a new creature with basic stats and the given species trait."""
-        traits = [species] if species in ['gatherer', 'builder', 'herbivore'] else ['herbivore']
+        species_traits = {
+            'gatherer': ['gatherer'],
+            'builder': ['builder'],
+            'deer': ['deer', 'herbivore'],
+            'boar': ['boar', 'herbivore'],
+            'goat': ['goat', 'herbivore'],
+            'bear': ['bear', 'carnivore'],
+            'fish': ['fish', 'herbivore'],
+        }
+        traits = species_traits.get(species, ['herbivore'])
+
         cid = f"{species}_{len(self.creatures)+1}"
         stats = generate_stats()
         creature = Creature(cid, x, y, traits, stats)
@@ -109,6 +135,7 @@ class World:
         if self.tribes:
             self.tribes[0].add_member(creature)
         return creature
+
     def spawn_raid_band(self, attacking_tribe, target_tribe):
         """Placeholder for raid band creation used by older tribe logic."""
         pass
