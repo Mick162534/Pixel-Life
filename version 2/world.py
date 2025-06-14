@@ -13,6 +13,7 @@ from entities.creature import Creature
 from society.tribe import Tribe
 from systems.pheromone_map import PheromoneMap
 from terrain import TerrainGenerator
+from entities.creature_stats import generate_stats
 
 class World:
 
@@ -98,7 +99,16 @@ class World:
             if abs(c.x - x) <= radius and abs(c.y - y) <= radius:
                 found.append(c)
         return found
-
+    def spawn_creature(self, species, x, y):
+        """Create a new creature with basic stats and the given species trait."""
+        traits = [species] if species in ['gatherer', 'builder', 'herbivore'] else ['herbivore']
+        cid = f"{species}_{len(self.creatures)+1}"
+        stats = generate_stats()
+        creature = Creature(cid, x, y, traits, stats)
+        self.creatures.append(creature)
+        if self.tribes:
+            self.tribes[0].add_member(creature)
+        return creature
     def spawn_raid_band(self, attacking_tribe, target_tribe):
         """Placeholder for raid band creation used by older tribe logic."""
         pass
