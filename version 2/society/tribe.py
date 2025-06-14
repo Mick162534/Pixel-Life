@@ -9,11 +9,19 @@ class Tribe:
         self.center_x = center_x
         self.center_y = center_y
         self.members = []
+        # Track tiles making up the tribe's claimed territory
+        self.territory_chunks = set()
         self.territory_radius = 6
         self.known_resources = []
         self.known_piles = []
         self.research = ResearchManager(self.id)
         self.building_cooldown = 0
+        # Initial territory centered on the tribe location
+        self.expand_territory_placeholder()
+
+    def expand_territory_placeholder(self):
+        """Seed territory with the center tile so other checks don't fail."""
+        self.territory_chunks.add((self.center_x, self.center_y))
 
     def add_member(self, creature):
         self.members.append(creature)
@@ -56,6 +64,7 @@ class Tribe:
     def expand_territory(self, world):
         cx, cy = self.center_x, self.center_y
         r = self.territory_radius
+        self.territory_chunks.add((cx, cy))
         for dx in range(-r, r+1):
             for dy in [-r, r]:
                 world.wall_targets.append((cx + dx, cy + dy))
