@@ -14,6 +14,7 @@ class Creature:
         self.world_context = None  # Will be set each tick
         self.energy = 100
         self.hunger = 100
+        self.age = 0
         self.alive = True
         self.carrying = None
         self.target_node = None
@@ -23,6 +24,7 @@ class Creature:
         self.eating = False
 
     def tick(self, world):
+        self.age += 1
         # Guard behavior
         if 'guard' in self.traits:
             if guard_behavior(self, world):
@@ -48,6 +50,8 @@ class Creature:
             self.gather_logic(world)
         elif "builder" in self.traits:
             self.builder_logic(world)
+        else:
+            self.wander(world)
 
     def eat_logic(self, world):
         if self.target_node:
@@ -111,3 +115,9 @@ class Creature:
         dy = ty - self.y
         self.x += 1 if dx > 0 else -1 if dx < 0 else 0
         self.y += 1 if dy > 0 else -1 if dy < 0 else 0
+
+    def wander(self, world):
+        nx = self.x + random.randint(-1, 1)
+        ny = self.y + random.randint(-1, 1)
+        self.x = max(0, min(world.width - 1, nx))
+        self.y = max(0, min(world.height - 1, ny))
