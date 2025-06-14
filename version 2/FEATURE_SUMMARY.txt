@@ -41,4 +41,7 @@ Ecosystem Simulation – Available Functionality
 11. Terrain and Rendering:
    - TerrainGenerator creates grass, water, and tree tiles.
    - SimRenderer and MapRenderer draw terrain using basic colored sprites.
+   - When no image assets are present, SimRenderer generates colored placeholders
+     for buildings and common creature traits.
+
    - Initial deer creature spawns and eats from nearby bushes.
