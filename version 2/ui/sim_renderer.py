@@ -11,6 +11,7 @@ class SimRenderer:
         self.camera_y = 0
         self.view_tiles_x = screen.get_width() // tile_size
         self.view_tiles_y = screen.get_height() // tile_size
+
         # Load creature sprites (optional)
         self.creature_sprites = {}
         # Load building sprites
