@@ -1,5 +1,4 @@
 import pygame
-import os
 from pathlib import Path
 
 class SimRenderer:
@@ -11,12 +10,25 @@ class SimRenderer:
         self.camera_y = 0
         self.view_tiles_x = screen.get_width() // tile_size
         self.view_tiles_y = screen.get_height() // tile_size
-   # Load creature sprites (optional)
+        # Placeholder surfaces for creatures, buildings and terrain
+        # If image assets exist locally they will override these colors
         self.creature_sprites = {}
-        # Load building sprites
         self.building_sprites = {}
-        building_types = ['StorageHut', 'LoggingCamp', 'Farm', 'ConstructionYard', 'TamingPen', 'Watchtower', 'ResearchHut', 'Housing', 'CommunalCenter']
-        for b in building_types:
+        building_colors = {
+            'StorageHut': (139, 69, 19),
+            'LoggingCamp': (160, 82, 45),
+            'Farm': (218, 165, 32),
+            'ConstructionYard': (105, 105, 105),
+            'TamingPen': (205, 133, 63),
+            'Watchtower': (184, 134, 11),
+            'ResearchHut': (70, 130, 180),
+            'Housing': (210, 180, 140),
+            'CommunalCenter': (128, 0, 128),
+        }
+        for b, color in building_colors.items():
+            surface = pygame.Surface((tile_size, tile_size))
+            surface.fill(color)
+            self.building_sprites[b] = surface
             path = Path("assets/buildings") / f"{b}.png"
             if path.exists():
                 img = pygame.image.load(str(path))
@@ -24,11 +36,30 @@ class SimRenderer:
 
         # Terrain sprites
         self.terrain_sprites = {}
-        for t in ["grass", "water", "tree"]:
+        terrain_colors = {
+            "grass": (34, 139, 34),
+            "water": (0, 0, 255),
+            "tree": (0, 100, 0),
+        }
+        for t, color in terrain_colors.items():
+            surface = pygame.Surface((tile_size, tile_size))
+            surface.fill(color)
+            self.terrain_sprites[t] = surface
             path = Path("assets/terrain") / f"{t}.png"
             if path.exists():
                 img = pygame.image.load(str(path))
                 self.terrain_sprites[t] = pygame.transform.scale(img, (tile_size, tile_size))
+
+        # creature colors
+        trait_colors = {
+            "builder": (255, 215, 0),
+            "gatherer": (30, 144, 255),
+            "herbivore": (124, 252, 0),
+        }
+        for trait, color in trait_colors.items():
+            surf = pygame.Surface((tile_size, tile_size))
+            surf.fill(color)
+            self.creature_sprites[trait] = surf
 
     def render(self):
         self.screen.fill((30, 30, 30))
