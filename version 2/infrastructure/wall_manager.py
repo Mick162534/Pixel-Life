@@ -1,3 +1,6 @@
+from infrastructure.wall_tile import WallTile
+
+
 class WallManager:
     def __init__(self):
         self.wall_tiles = []
