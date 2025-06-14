@@ -74,7 +74,6 @@ class SimRenderer:
             for y in range(self.view_tiles_y):
                 wy = y + self.camera_y
                 if wy >= self.sim.height:
-                    continue
                 tile = self.sim.terrain.get_tile(wx, wy)
                 sprite = self.terrain_sprites.get(tile)
                 if sprite:

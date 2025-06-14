@@ -28,6 +28,8 @@ def main():
         renderer.render()
         if ui.active_tab == 'Map':
             map_renderer.render()
+        ui.draw(screen)
+        pygame.display.flip()
 
         clock.tick(30)
 
