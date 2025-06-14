@@ -47,3 +47,4 @@ Ecosystem Simulation – Available Functionality
    - Spawn menu (toggle with `n`) lets you spawn gatherers, builders and wildlife
      such as deer, boar, goat, bear and fish. Hold Shift while confirming to
      spawn five at once.
+

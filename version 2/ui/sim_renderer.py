@@ -40,6 +40,7 @@ class SimRenderer:
             "grass": (34, 139, 34),
             "water": (0, 0, 255),
             "tree": (139, 69, 19),
+
         }
         for t, color in terrain_colors.items():
             surface = pygame.Surface((tile_size, tile_size))
@@ -60,6 +61,7 @@ class SimRenderer:
             "goat": (245, 245, 220),
             "bear": (139, 69, 19),
             "fish": (0, 191, 255),
+
         }
         for trait, color in trait_colors.items():
             surf = pygame.Surface((tile_size, tile_size))
@@ -104,3 +106,4 @@ class SimRenderer:
                     self.screen.blit(sprite, (sx, sy))
                 else:
                     pygame.draw.rect(self.screen, (255,255,0), (sx, sy, self.tile_size, self.tile_size))
+

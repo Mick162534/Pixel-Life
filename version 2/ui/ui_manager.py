@@ -63,7 +63,6 @@ class UIManager:
             max_y = max(0, self.sim.height - self.renderer.view_tiles_y)
             self.renderer.camera_x = max(0, min(max_x, self.cam_start[0] - dx))
             self.renderer.camera_y = max(0, min(max_y, self.cam_start[1] - dy))
-
     def draw(self, screen):
         if self.show_spawn_menu:
             menu_w = 150
