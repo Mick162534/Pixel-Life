@@ -10,9 +10,10 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
 
-    sim = World(0,0)  # dimensions unused with chunk manager
+    # initialize a reasonably sized world so environment generation succeeds
+    sim = World(50, 50)
     renderer = SimRenderer(sim, screen)
-    map_renderer = MapRenderer(sim, screen)
+    map_renderer = MapRenderer(sim, renderer, screen)
     ui = UIManager(sim, renderer, map_renderer)
 
     while True:
