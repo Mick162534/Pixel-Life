@@ -11,8 +11,7 @@ class SimRenderer:
         self.camera_y = 0
         self.view_tiles_x = screen.get_width() // tile_size
         self.view_tiles_y = screen.get_height() // tile_size
-
-        # Load creature sprites (optional)
+   # Load creature sprites (optional)
         self.creature_sprites = {}
         # Load building sprites
         self.building_sprites = {}
@@ -23,8 +22,30 @@ class SimRenderer:
                 img = pygame.image.load(str(path))
                 self.building_sprites[b] = pygame.transform.scale(img, (tile_size, tile_size))
 
+        # Terrain sprites
+        self.terrain_sprites = {}
+        for t in ["grass", "water", "tree"]:
+            path = Path("assets/terrain") / f"{t}.png"
+            if path.exists():
+                img = pygame.image.load(str(path))
+                self.terrain_sprites[t] = pygame.transform.scale(img, (tile_size, tile_size))
+
     def render(self):
         self.screen.fill((30, 30, 30))
+
+        # Draw terrain grid
+        for x in range(self.view_tiles_x):
+            wx = x + self.camera_x
+            if wx >= self.sim.width:
+                continue
+            for y in range(self.view_tiles_y):
+                wy = y + self.camera_y
+                if wy >= self.sim.height:
+                    continue
+                tile = self.sim.terrain.get_tile(wx, wy)
+                sprite = self.terrain_sprites.get(tile)
+                if sprite:
+                    self.screen.blit(sprite, (x * self.tile_size, y * self.tile_size))
         # Draw buildings within camera view
         for b in self.sim.buildings:
             sx = (b.x - self.camera_x) * self.tile_size

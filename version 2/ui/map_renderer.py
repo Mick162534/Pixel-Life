@@ -15,6 +15,17 @@ class MapRenderer:
         # simple mini-map of creature positions
         cw = self.map_rect.width / self.sim.width
         ch = self.map_rect.height / self.sim.height
+        # draw simple terrain colors
+        for x in range(self.sim.width):
+            for y in range(self.sim.height):
+                tile = self.sim.terrain.get_tile(x, y)
+                color = (34,139,34) if tile == "grass" else (0,0,255) if tile == "water" else (139,69,19)
+                pygame.draw.rect(
+                    self.screen,
+                    color,
+                    (self.map_rect.x + x * cw, self.map_rect.y + y * ch, cw, ch)
+                )
+
         for c in self.sim.creatures:
             if not getattr(c, "alive", True):
                 continue

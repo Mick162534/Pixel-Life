@@ -12,6 +12,7 @@ from infrastructure.wall_tile import WallTile
 from entities.creature import Creature
 from society.tribe import Tribe
 from systems.pheromone_map import PheromoneMap
+from terrain import TerrainGenerator
 
 class World:
 
@@ -24,6 +25,7 @@ class World:
         self.bushes = []
         self.resource_manager = ResourceManager()
         self.pheromone_map = PheromoneMap(self.width, self.height)
+        self.terrain = TerrainGenerator(self.width, self.height)
         self.wall_manager = WallManager()
         self.wall_targets = []
         self.tribes = []
@@ -45,13 +47,13 @@ class World:
 
         gatherer = Creature("gatherer_1", self.width//2 + 2, self.height//2 + 2, ["gatherer"], {"strength": 10, "intelligence": 10, "charisma": 5})
         builder = Creature("builder_1", self.width//2 + 4, self.height//2 + 4, ["builder"], {"strength": 10, "intelligence": 8, "charisma": 5})
-        eater = Creature("eater_1", self.width//2 - 3, self.height//2 - 3, ["gatherer"], {"strength": 10, "intelligence": 9, "charisma": 6})
-        self.creatures.extend([gatherer, builder, eater])
+        deer = Creature("deer_1", self.width//2 - 3, self.height//2 - 3, ["herbivore"], {"strength": 5, "intelligence": 6, "charisma": 4})
+        self.creatures.extend([gatherer, builder, deer])
 
         tribe = Tribe("tribe_alpha", self.width//2, self.height//2)
         tribe.add_member(gatherer)
         tribe.add_member(builder)
-        tribe.add_member(eater)
+        tribe.add_member(deer)
         self.tribes.append(tribe)
 
         self.initiate_wall_ring(cx=self.width//2, cy=self.height//2, radius=6)
@@ -86,6 +88,20 @@ class World:
                 valid_area.add((cx + dx, cy + dy))
 
         self.wall_manager.wall_tiles = [w for w in self.wall_manager.wall_tiles if (w.x, w.y) in valid_area]
+
+    def get_creatures_in_range(self, x, y, radius=5):
+        """Return all living creatures within the given Manhattan radius."""
+        found = []
+        for c in self.creatures:
+            if not getattr(c, "alive", True):
+                continue
+            if abs(c.x - x) <= radius and abs(c.y - y) <= radius:
+                found.append(c)
+        return found
+
+    def spawn_raid_band(self, attacking_tribe, target_tribe):
+        """Placeholder for raid band creation used by older tribe logic."""
+        pass
 
     def tick(self):
         # Dynamic tribe formation
