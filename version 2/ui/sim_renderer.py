@@ -78,6 +78,7 @@ class SimRenderer:
                 if sprite:
                     self.screen.blit(sprite, (x * self.tile_size, y * self.tile_size))
 
+
         # Draw buildings within camera view
         for b in self.sim.buildings:
             sx = (b.x - self.camera_x) * self.tile_size
@@ -99,3 +100,4 @@ class SimRenderer:
                     self.screen.blit(sprite, (sx, sy))
                 else:
                     pygame.draw.rect(self.screen, (255,255,0), (sx, sy, self.tile_size, self.tile_size))
+
