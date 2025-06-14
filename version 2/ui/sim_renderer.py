@@ -11,7 +11,7 @@ class SimRenderer:
         self.camera_y = 0
         self.view_tiles_x = screen.get_width() // tile_size
         self.view_tiles_y = screen.get_height() // tile_size
-        # Load creature sprites (optional)
+   # Load creature sprites (optional)
         self.creature_sprites = {}
         # Load building sprites
         self.building_sprites = {}
@@ -46,7 +46,6 @@ class SimRenderer:
                 sprite = self.terrain_sprites.get(tile)
                 if sprite:
                     self.screen.blit(sprite, (x * self.tile_size, y * self.tile_size))
-
         # Draw buildings within camera view
         for b in self.sim.buildings:
             sx = (b.x - self.camera_x) * self.tile_size
