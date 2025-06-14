@@ -1,8 +1,9 @@
 import pygame
 
 class MapRenderer:
-    def __init__(self, sim, screen, map_rect=(10,10,200,200)):
+    def __init__(self, sim, renderer, screen, map_rect=(10,10,200,200)):
         self.sim = sim
+        self.renderer = renderer
         self.screen = screen
         self.map_rect = pygame.Rect(map_rect)
 
@@ -22,3 +23,13 @@ class MapRenderer:
                 (255, 255, 0),
                 (self.map_rect.x + c.x * cw, self.map_rect.y + c.y * ch, cw, ch),
             )
+        # show camera viewport
+        rect_w = self.renderer.view_tiles_x * cw
+        rect_h = self.renderer.view_tiles_y * ch
+        cam_rect = pygame.Rect(
+            self.map_rect.x + self.renderer.camera_x * cw,
+            self.map_rect.y + self.renderer.camera_y * ch,
+            rect_w,
+            rect_h,
+        )
+        pygame.draw.rect(self.screen, (255,255,0), cam_rect, 1)
