@@ -11,18 +11,14 @@ class MapRenderer:
         s = pygame.Surface((self.map_rect.width, self.map_rect.height), pygame.SRCALPHA)
         s.fill((0,0,0,180))
         self.screen.blit(s, (self.map_rect.x, self.map_rect.y))
-        # draw chunks
-        cw = self.map_rect.width / self.sim.chunk_manager.max_chunks_x
-        ch = self.map_rect.height / self.sim.chunk_manager.max_chunks_y
-        for (cx, cy), chunk in self.sim.chunk_manager.loaded.items():
-            color = (34,139,34)  # default
-            # pick color by biome of first tile
-            tile = chunk['tiles'][0][0]
-            if tile == 'water': color = (0,0,255)
-            elif tile == 'forest': color = (34,139,34)
-            pygame.draw.rect(self.screen, color,
-                (self.map_rect.x + cx*cw, self.map_rect.y + cy*ch, cw, ch))
-        # highlight camera
-        cam_cx, cam_cy = self.sim.camera_chunk
-        pygame.draw.rect(self.screen, (255,255,0),
-                         (self.map_rect.x + cam_cx*cw, self.map_rect.y + cam_cy*ch, cw, ch), 2)
+        # simple mini-map of creature positions
+        cw = self.map_rect.width / self.sim.width
+        ch = self.map_rect.height / self.sim.height
+        for c in self.sim.creatures:
+            if not getattr(c, "alive", True):
+                continue
+            pygame.draw.rect(
+                self.screen,
+                (255, 255, 0),
+                (self.map_rect.x + c.x * cw, self.map_rect.y + c.y * ch, cw, ch),
+            )

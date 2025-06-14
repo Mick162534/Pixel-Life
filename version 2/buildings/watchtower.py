@@ -11,4 +11,5 @@ class Watchtower:
     def tick(self, world):
         for c in world.creatures:
             if c.owner_id != self.owner_id and abs(c.x - self.x) <= 5 and abs(c.y - self.y) <= 5:
-                c.traits.add("revealed")  # Could be used by combat AI later
+                if "revealed" not in c.traits:
+                    c.traits.append("revealed")  # Could be used by combat AI later

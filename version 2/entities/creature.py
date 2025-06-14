@@ -10,11 +10,8 @@ class Creature:
         self.y = y
         self.traits = traits
         self.stats = stats
-        self.energy =
         self.memory = Memory(capacity=10) if "has_memory" in self.traits else None
-        # Pheromone deposit on presence
         self.world_context = None  # Will be set each tick
-        # end memory init
         self.energy = 100
         self.hunger = 100
         self.alive = True
@@ -58,13 +55,8 @@ class Creature:
                 eaten = self.target_node.harvest(10)
                 if eaten > 0:
                     self.hunger = min(100, self.hunger + eaten * 2)
-                    self.energy =
-        self.memory = Memory(capacity=10) if "has_memory" in self.traits else None
-        # Pheromone deposit on presence
-        self.world_context = None  # Will be set each tick
-        # end memory init
-        self.energy = min(100, self.energy + eaten)
-                self.target_node = None
+                    self.energy = min(100, self.energy + eaten)
+                    self.target_node = None
             else:
                 self.move_towards(self.target_node.x, self.target_node.y)
         else:
