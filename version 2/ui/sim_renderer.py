@@ -45,6 +45,7 @@ class SimRenderer:
             surface = pygame.Surface((tile_size, tile_size))
             surface.fill(color)
             self.terrain_sprites[t] = surface
+
             path = Path("assets/terrain") / f"{t}.png"
             if path.exists():
                 img = pygame.image.load(str(path))
@@ -60,6 +61,7 @@ class SimRenderer:
             surf = pygame.Surface((tile_size, tile_size))
             surf.fill(color)
             self.creature_sprites[trait] = surf
+
 
     def render(self):
         self.screen.fill((30, 30, 30))
@@ -77,6 +79,7 @@ class SimRenderer:
                 sprite = self.terrain_sprites.get(tile)
                 if sprite:
                     self.screen.blit(sprite, (x * self.tile_size, y * self.tile_size))
+
 
         # Draw buildings within camera view
         for b in self.sim.buildings:
