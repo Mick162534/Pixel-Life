@@ -21,7 +21,6 @@ def main():
     ui = UIManager(sim, renderer, map_renderer, metrics, graph_renderer)
     tick = 0
 
-
     while True:
         for evt in pygame.event.get():
             if evt.type == pygame.QUIT:

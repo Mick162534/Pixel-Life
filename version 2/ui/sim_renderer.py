@@ -41,7 +41,6 @@ class SimRenderer:
             "shallow_water": (173, 216, 230),
             "deep_water": (0, 0, 139),
             "tree": (139, 69, 19),
-
         }
         for t, color in terrain_colors.items():
             surface = pygame.Surface((tile_size, tile_size))
@@ -62,7 +61,6 @@ class SimRenderer:
             "goat": (245, 245, 220),
             "bear": (139, 69, 19),
             "fish": (0, 191, 255),
-
         }
         for trait, color in trait_colors.items():
             surf = pygame.Surface((tile_size, tile_size))

@@ -10,7 +10,6 @@ class TerrainGenerator:
 
     def generate(self):
         # sprinkle a few ponds with shallow edges and deep centers
-
         for _ in range(max(1, (self.width * self.height) // 50)):
             wx, wy = random.randint(0, self.width - 1), random.randint(0, self.height - 1)
             for dx in range(-2, 3):
