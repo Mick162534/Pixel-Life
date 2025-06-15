@@ -16,7 +16,7 @@ def guard_behavior(creature, world):
     # Move to or attack the target
     if abs(target.x - creature.x) > 1 or abs(target.y - creature.y) > 1:
         # move_towards should be defined on Creature
-        creature.move_towards(target.x, target.y)
+        creature.move_towards(target.x, target.y, world)
     else:
         # attack method on Creature
         creature.attack(target)
