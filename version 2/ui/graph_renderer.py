@@ -1,6 +1,7 @@
 try:
     import matplotlib
     matplotlib.use("Agg")  # ensure headless environments work
+
     import matplotlib.pyplot as plt
     MATPLOTLIB = True
 except Exception:  # matplotlib not available in minimal env
@@ -24,6 +25,7 @@ class GraphRenderer:
             rect = txt.get_rect(center=(self.width // 2, self.height // 2))
             surface.blit(txt, rect)
             return surface
+
 
         fig, ax = plt.subplots(figsize=(6, 4))
         ticks = self.metrics.get_all_ticks()
