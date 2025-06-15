@@ -1,4 +1,6 @@
 try:
+    import matplotlib
+    matplotlib.use("Agg")  # ensure headless environments work
     import matplotlib.pyplot as plt
     MATPLOTLIB = True
 except Exception:  # matplotlib not available in minimal env
