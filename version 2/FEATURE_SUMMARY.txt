@@ -48,6 +48,11 @@ Ecosystem Simulation – Available Functionality
    - When no image assets are present, SimRenderer generates colored placeholders
      for buildings and creature species.
    - Spawn menu (toggle with `n`) lets you spawn gatherers, builders and wildlife
-     such as deer, boar, goat, bear and fish. Hold Shift while confirming to
-     spawn five at once.
-
+    such as deer, boar, goat, bear and fish. Hold Shift while confirming to
+    spawn five at once.
+12. Time Controls and Graph Tab:
+    - Press Space to pause/unpause the simulation and +/- to change speed.
+    - TAB switches between the SIM view and a GRAPH tab.
+    - Graph tab plots metrics like creature count and traits. Press 'd' to
+      choose which metric to display from a dropdown on the right.
+    - The mini-map is toggled with 'm'.

@@ -8,20 +8,15 @@ class GraphRenderer:
         self.width = width
         self.height = height
 
-    def render(self):
+    def render(self, series_keys=None):
+        """Return a pygame Surface with the requested metric series plotted."""
         fig, ax = plt.subplots(figsize=(6, 4))
         ticks = self.metrics.get_all_ticks()
-        trait_keys = self.metrics.get_all_trait_keys()
+        if series_keys is None:
+            series_keys = ["creature_count"]
 
-        # Plot total counts
-        ax.plot(ticks, self.metrics.get_series("creature_count"), label="Creatures")
-        ax.plot(ticks, self.metrics.get_series("grass_count"), label="Grass")
-        ax.plot(ticks, self.metrics.get_series("corpse_count"), label="Corpses")
-        ax.plot(ticks, self.metrics.get_series("avg_energy"), label="Avg Energy")
-
-        # Plot traits dynamically
-        for trait in trait_keys:
-            ax.plot(ticks, self.metrics.get_series(trait), label=trait.title())
+        for key in series_keys:
+            ax.plot(ticks, self.metrics.get_series(key), label=key.replace("_", " ").title())
 
         ax.set_title("Simulation Metrics Over Time")
         ax.set_xlabel("Ticks")
