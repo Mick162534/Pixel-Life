@@ -4,34 +4,34 @@ class MetricsCollector:
     def __init__(self):
         self.tick_data = []
 
-    def record(self, tick, creatures, env, corpse_heatmap):
+    def record(self, tick, world):
+        """Collect simple metrics from the world each tick."""
         count_by_trait = defaultdict(int)
         total_energy = 0
-        grass_count = 0
-        corpse_count = 0
+        resource_count = 0
+        bush_count = 0
 
-        for row in env.grid:
-            for tile in row:
-                if tile == "GRASS":
-                    grass_count += 1
+        for node in getattr(world.resource_manager, "nodes", []):
+            if not getattr(node, "is_depleted", False):
+                resource_count += 1
 
-        for row in corpse_heatmap.grid:
-            for val in row:
-                if val > 0:
-                    corpse_count += 1
+        for bush in getattr(world, "bushes", []):
+            if not bush.is_depleted:
+                bush_count += 1
 
-        for c in creatures:
+        living = [c for c in world.creatures if getattr(c, "alive", True)]
+        for c in living:
             total_energy += c.energy
             for trait in c.traits:
                 count_by_trait[trait] += 1
 
-        avg_energy = total_energy / len(creatures) if creatures else 0
+        avg_energy = total_energy / len(living) if living else 0
 
         data = {
             "tick": tick,
-            "creature_count": len(creatures),
-            "grass_count": grass_count,
-            "corpse_count": corpse_count,
+            "creature_count": len(living),
+            "resource_nodes": resource_count,
+            "bush_nodes": bush_count,
             "avg_energy": avg_energy,
         }
         data.update(count_by_trait)
@@ -45,8 +45,9 @@ class MetricsCollector:
 
     def get_all_trait_keys(self):
         trait_keys = set()
+        ignore = ["tick", "creature_count", "resource_nodes", "bush_nodes", "avg_energy"]
         for tick in self.tick_data:
             for key in tick:
-                if key not in ["tick", "creature_count", "grass_count", "corpse_count", "avg_energy"]:
+                if key not in ignore:
                     trait_keys.add(key)
         return sorted(trait_keys)
