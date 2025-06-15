@@ -43,6 +43,7 @@ Ecosystem Simulation – Available Functionality
    - Deep water is dark blue and impassable without the "swimming" trait.
    - Shallow water is light blue and slows non-swimmers.
    - SimRenderer and MapRenderer draw terrain using these colors. Trees
+
      render as brown squares.
    - When no image assets are present, SimRenderer generates colored placeholders
      for buildings and creature species.

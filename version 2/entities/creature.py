@@ -69,6 +69,7 @@ class Creature:
                     self.target_creature = None
                 else:
                     self.move_towards(self.target_creature.x, self.target_creature.y, world)
+
             else:
                 potential = [c for c in world.creatures if c.alive and c is not self and "herbivore" in c.traits]
                 if potential:
@@ -155,3 +156,4 @@ class Creature:
         dx = random.randint(-1, 1)
         dy = random.randint(-1, 1)
         self.try_move(dx, dy, world)
+
