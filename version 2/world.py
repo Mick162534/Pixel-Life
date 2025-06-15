@@ -70,6 +70,7 @@ class World:
             fx, fy = random.choice(water_tiles)
         fish = Creature("fish_1", fx, fy, ["fish", "herbivore", "swimming"], generate_stats())
         self.creatures.extend([gatherer, builder, deer, boar, goat, bear, fish])
+
         tribe = Tribe("tribe_alpha", self.width//2, self.height//2)
         tribe.add_member(gatherer)
         tribe.add_member(builder)

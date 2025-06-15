@@ -105,4 +105,3 @@ class SimRenderer:
                     self.screen.blit(sprite, (sx, sy))
                 else:
                     pygame.draw.rect(self.screen, (255,255,0), (sx, sy, self.tile_size, self.tile_size))
-

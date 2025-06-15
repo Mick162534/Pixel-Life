@@ -1,4 +1,8 @@
-import matplotlib.pyplot as plt
+try:
+    import matplotlib.pyplot as plt
+    MATPLOTLIB = True
+except Exception:  # matplotlib not available in minimal env
+    MATPLOTLIB = False
 import pygame
 import io
 
@@ -10,6 +14,16 @@ class GraphRenderer:
 
     def render(self, series_keys=None):
         """Return a pygame Surface with the requested metric series plotted."""
+        surface = pygame.Surface((self.width, self.height))
+        if not MATPLOTLIB:
+            surface.fill((0, 0, 0))
+            font = pygame.font.SysFont(None, 24)
+            txt = font.render("matplotlib not available", True, (255, 0, 0))
+            rect = txt.get_rect(center=(self.width // 2, self.height // 2))
+            surface.blit(txt, rect)
+            return surface
+
+
         fig, ax = plt.subplots(figsize=(6, 4))
         ticks = self.metrics.get_all_ticks()
         if series_keys is None:
@@ -28,6 +42,5 @@ class GraphRenderer:
         plt.close(fig)
         buf.seek(0)
         image = pygame.image.load(buf, 'png')
-        surface = pygame.Surface((self.width, self.height))
         surface.blit(pygame.transform.scale(image, (self.width, self.height)), (0, 0))
         return surface
