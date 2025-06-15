@@ -132,6 +132,7 @@ class World:
             'fish': ['fish', 'herbivore', 'swimming'],
         }
         traits = species_traits.get(species, ['herbivore'])
+
         cid = f"{species}_{len(self.creatures)+1}"
         stats = generate_stats()
         creature = Creature(cid, x, y, traits, stats)

@@ -23,6 +23,7 @@ class GraphRenderer:
             surface.blit(txt, rect)
             return surface
 
+
         fig, ax = plt.subplots(figsize=(6, 4))
         ticks = self.metrics.get_all_ticks()
         if series_keys is None:
