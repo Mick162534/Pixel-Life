@@ -40,7 +40,7 @@ class ConstructionManager:
             new_building = TamingPen(x, y, tribe_id)
         elif b_type == "watchtower":
             new_building = Watchtower(x, y, tribe_id)
-                elif b_type == "den":
+        elif b_type == "den":
             from buildings.den import Den
             new_building = Den(x, y, tribe_id)
         elif b_type == "research_hut":
