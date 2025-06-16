@@ -1,8 +1,13 @@
 try:
     import matplotlib
     matplotlib.use("Agg")  # ensure headless environments work
-
-    import matplotlib.pyplot as plt
+    MATPLOTLIB_ERROR = ""
+except Exception as e:  # matplotlib not available in minimal env
+    MATPLOTLIB_ERROR = str(e)
+            msg = "matplotlib not available"
+            if MATPLOTLIB_ERROR:
+                msg += f" - {MATPLOTLIB_ERROR}"
+            txt = font.render(msg, True, (255, 0, 0))
     MATPLOTLIB = True
 except Exception:  # matplotlib not available in minimal env
     MATPLOTLIB = False
