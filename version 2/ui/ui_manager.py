@@ -51,6 +51,7 @@ class UIManager:
                     mods = pygame.key.get_mods()
                     count = 5 if mods & pygame.KMOD_SHIFT else 1
                     species = self.species_options[self.spawn_index]
+
                     for _ in range(count):
                         cx = self.renderer.camera_x + self.renderer.view_tiles_x // 2
                         cy = self.renderer.camera_y + self.renderer.view_tiles_y // 2
@@ -72,6 +73,7 @@ class UIManager:
                     self.metric_menu = False
                 elif evt.key == pygame.K_ESCAPE:
                     self.metric_menu = False
+
             elif evt.key == pygame.K_LEFT:
                 self.renderer.camera_x = max(0, self.renderer.camera_x - 1)
             elif evt.key == pygame.K_RIGHT:
@@ -142,5 +144,6 @@ class UIManager:
             pygame.draw.rect(screen, (255, 255, 255), (x, y, menu_w, menu_h), 1)
             for i, sp in enumerate(self.species_options):
                 color = (255, 255, 0) if i == self.spawn_index else (255, 255, 255)
+
                 text = self.font.render(sp, True, color)
                 screen.blit(text, (x + 5, y + 5 + i * 20))

@@ -27,6 +27,7 @@ class MapRenderer:
                     color = (0, 0, 139)
                 else:
                     color = (139, 69, 19)
+
                 pygame.draw.rect(
                     self.screen,
                     color,

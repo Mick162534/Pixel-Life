@@ -7,6 +7,7 @@ try:
 except Exception as e:  # matplotlib not available in minimal env
     MATPLOTLIB = False
     MATPLOTLIB_ERROR = str(e)
+
 import pygame
 import io
 
@@ -26,6 +27,7 @@ class GraphRenderer:
             if MATPLOTLIB_ERROR:
                 msg += f" - {MATPLOTLIB_ERROR}"
             txt = font.render(msg, True, (255, 0, 0))
+
             rect = txt.get_rect(center=(self.width // 2, self.height // 2))
             surface.blit(txt, rect)
             return surface
