@@ -1,11 +1,13 @@
 try:
     import matplotlib
     matplotlib.use("Agg")  # ensure headless environments work
-
     import matplotlib.pyplot as plt
     MATPLOTLIB = True
-except Exception:  # matplotlib not available in minimal env
+    MATPLOTLIB_ERROR = ""
+except Exception as e:  # matplotlib not available in minimal env
     MATPLOTLIB = False
+    MATPLOTLIB_ERROR = str(e)
+
 import pygame
 import io
 
@@ -21,11 +23,14 @@ class GraphRenderer:
         if not MATPLOTLIB:
             surface.fill((0, 0, 0))
             font = pygame.font.SysFont(None, 24)
-            txt = font.render("matplotlib not available", True, (255, 0, 0))
+            msg = "matplotlib not available"
+            if MATPLOTLIB_ERROR:
+                msg += f" - {MATPLOTLIB_ERROR}"
+            txt = font.render(msg, True, (255, 0, 0))
+
             rect = txt.get_rect(center=(self.width // 2, self.height // 2))
             surface.blit(txt, rect)
             return surface
-
 
         fig, ax = plt.subplots(figsize=(6, 4))
         ticks = self.metrics.get_all_ticks()
